@@ -157,12 +157,19 @@
       // Calculate the width and height to match the container while keeping the labels at a fixed size
       //var xscale = this.element.width()/WIDTH;
       //var yscale = this.element.height()/HEIGHT;
-      var xscale = (this.element.width() * WIDTH) + 10;
-      var yscale = (this.element.height() * HEIGHT) + 10;
-      
+	  var xscale = WIDTH/this.element.width();
+	  var yscale = HEIGHT/this.element.height();
+
       this.scale = Math.min(xscale, yscale);
-      this.labelAreaWidth = Math.ceil(LABELS_WIDTH/this.scale); // The actual width with the labels reversed scaled
-      
+	  var scaledLabelSize = Math.ceil(LABELS_WIDTH * this.scale); // The actual width with the labels reversed scaled
+ 	  //console.log("W: "+width+", H: "+height+", Labels: "+scaledLabelSize+", Scale: "+this.scale);
+     
+	  // don't scale below actual size
+	  if (scaledLabelSize < LABELS_WIDTH) {
+		  this.labelAreaWidth = LABELS_WIDTH;
+	  } else {
+		  this.labelAreaWidth = Math.ceil(LABELS_WIDTH/this.scale); 
+	  }
       var paperWidthWithLabels = WIDTH + Math.max(0, this.labelAreaWidth - LABELS_WIDTH);
       // Create the Raphael instances
       this.paper = Raphael(this.element.get(0), paperWidthWithLabels, HEIGHT);//this.element.width(), this.element.height());
@@ -617,4 +624,4 @@
   // Create the plugin
   jQueryPluginFactory($, 'usmap', methods, getters);
 
-})(jQuery, document, window, Raphael);
+})(jQuery, document, window, Raphael);// JavaScript Document
